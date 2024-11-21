@@ -1,4 +1,4 @@
-from App.models import User, Admin, Alumni, Company
+from App.models import User, Admin, Jobseeker, Employer
 from App.database import db
 
 # from sqlalchemy.orm import with_polymorphic
@@ -13,21 +13,21 @@ def get_user_by_username(username):
     # return User.query.filter_by(username=username).first()
     user = None
 #   user = User.query.filter_by(username=data['username']).first()
-    alumni = Alumni.query.filter_by(username=username).first()
-    if alumni:
-        user = alumni
+    jobseeker = Jobseeker.query.filter_by(username=username).first()
+    if jobseeker:
+        user = jobseeker
     admin = Admin.query.filter_by(username=username).first()
     if admin:
         user = admin
-    company = Company.query.filter_by(username=username).first()
-    if company:
-        user = company
+    employer = Employer.query.filter_by(username=username).first()
+    if employer:
+        user = employer
     
     return user
 
 # def get_user_by_username(username):
 #     # Define the polymorphic loading to include all subclasses of User
-#     polymorphic_query = with_polymorphic(User, [User, Admin, Alumni, Company])
+#     polymorphic_query = with_polymorphic(User, [User, Admin, Jobseeker, Employer])
 
 #     # Query using the polymorphic loading and filter by username
 #     user = polymorphic_query.query.filter_by(username=username).first()
@@ -45,7 +45,7 @@ def get_user(id):
     return User.query.get(id)
 
 def get_all_users():
-    return db.session.query(Admin).all() + db.session.query(Alumni).all() + db.session.query(Company).all()
+    return db.session.query(Admin).all() + db.session.query(Jobseeker).all() + db.session.query(Employer).all()
     # return User.query.all()
 
 def get_all_users_json():
@@ -62,7 +62,7 @@ def update_user(id, username):
         db.session.add(user)
         return db.session.commit()
     return None
-    from App.models import User, Admin, Alumni, Company
+    from App.models import User, Admin, Jobseeker, Employer
 from App.database import db
 
 # from sqlalchemy.orm import with_polymorphic
@@ -77,15 +77,15 @@ def get_user_by_username(username):
     # return User.query.filter_by(username=username).first()
     user = None
 #   user = User.query.filter_by(username=data['username']).first()
-    alumni = Alumni.query.filter_by(username=username).first()
-    if alumni:
-        user = alumni
+    jobseeker = Jobseeker.query.filter_by(username=username).first()
+    if jobseeker:
+        user = jobseeker
     admin = Admin.query.filter_by(username=username).first()
     if admin:
         user = admin
-    company = Company.query.filter_by(username=username).first()
-    if company:
-        user = company
+    employer = Employer.query.filter_by(username=username).first()
+    if employer:
+        user = employer
     
     return user
 
@@ -93,7 +93,7 @@ def get_user(id):
     return User.query.get(id)
 
 def get_all_users():
-    return db.session.query(Admin).all() + db.session.query(Alumni).all() + db.session.query(Company).all()
+    return db.session.query(Admin).all() + db.session.query(Jobseeker).all() + db.session.query(Employer).all()
     # return User.query.all()
 
 def get_all_users_json():
