@@ -1,6 +1,6 @@
 from App.database import db
-from .company import Company
-# from .alumni import Alumni
+from .employer import Employer
+# from .jobseeker import Jobseeker
 
 from sqlalchemy import CheckConstraint
 
@@ -9,14 +9,14 @@ categories = [
     'Software Engineer', 'Database Manager', 'Programming', 'Web Design', 'Cyber Security', 
     'Big Data', 'Algorithms', 'N/A']
 
-# Association Table for Alumni and Listings (Many-to-Many)
-alumni_listings_association = db.Table(
-    'alumni_listings',
-    db.Column('alumni_id', db.Integer, db.ForeignKey('alumni.id')),
-    db.Column('listing_id', db.Integer, db.ForeignKey('listing.id'))
+# Association Table for Jobseeker and Jobs (Many-to-Many)
+jobseeker_jobs_association = db.Table(
+    'jobseeker_jobs',
+    db.Column('jobseeker_id', db.Integer, db.ForeignKey('jobseeker.id')),
+    db.Column('job_id', db.Integer, db.ForeignKey('job.id'))
 )
 
-class Listing(db.Model):
+class Job(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(120), nullable = False, unique=True)
     description = db.Column(db.String(500))
@@ -24,16 +24,16 @@ class Listing(db.Model):
     job_category = db.Column(db.String(120))
 
 
-    # set up relationship with Company (M-1)
-    company_name = db.Column(db.String(), db.ForeignKey('company.company_name'), nullable=False)
-    companies = db.relationship('Company', back_populates='listings', overlaps="company")
+    # set up relationship with Employer (M-1)
+    employer_name = db.Column(db.String(), db.ForeignKey('employer.employer_name'), nullable=False)
+    companies = db.relationship('Employer', back_populates='jobs', overlaps="employer")
 
     # need to add in columns for:
     # -salary - integer
     salary = db.Column(db.Integer(), nullable=False)
 
     # -date - 
-    # -position - string? - list from companyform.html
+    # -position - string? - list from employerform.html
     position = db.Column(db.String(), nullable=False)
 
     __table_args__ = (
@@ -62,9 +62,9 @@ class Listing(db.Model):
     # )
 
 
-    # Define relationship to Alumni
-    applicant = db.relationship('Alumni', secondary='alumni_listings', back_populates='listing')
-    # applicants = db.relationship('Alumni', secondary=alumni_listings_association, backref='applied_listings')
+    # Define relationship to Jobseeker
+    applicant = db.relationship('Jobseeker', secondary='jobseeker_jobs', back_populates='job')
+    # applicants = db.relationship('Jobseeker', secondary=jobseeker_jobs_association, backref='applied_jobs')
 
     # requests for deletion?
     request = db.Column(db.String())
@@ -73,11 +73,11 @@ class Listing(db.Model):
         CheckConstraint(request.in_(['Delete', 'Edit', 'None']), name = 'check_request_value'),
     )
 
-    def __init__(self, title, description, company_name, job_categories, salary,
+    def __init__(self, title, description, employer_name, job_categories, salary,
                 position, remote, ttnational, desiredcandidate, area):
         self.title = title
         self.description = description
-        self.company_name = company_name
+        self.employer_name = employer_name
 
         if job_categories is None:
             self.job_category = 'N/A'
@@ -94,8 +94,8 @@ class Listing(db.Model):
 
         self.request = 'None'
 
-    def get_company(self):
-        return self.company_name
+    def get_employer(self):
+        return self.employer_name
     
     # def set_request(self, request):
 
@@ -143,7 +143,7 @@ class Listing(db.Model):
             'id': self.id,
             'title':self.title,
             'description':self.description,
-            'company_name':self.company_name,
+            'employer_name':self.employer_name,
             'job_category':self.get_categories(),
 
             'salary':self.salary,
