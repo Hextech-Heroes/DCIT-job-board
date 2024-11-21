@@ -9,17 +9,17 @@ from .index import index_views
 
 from App.controllers import(
     get_user_by_username,
-    get_all_listings,
-    get_company_listings,
-    add_listing,
+    get_all_jobs,
+    get_employer_jobs,
+    add_job,
     add_categories,
-    get_listing,
-    delete_listing
+    get_job,
+    delete_job
 )
 
 from App.models import(
-    Alumni,
-    Company,
+    Jobseeker,
+    Employer,
     Admin
 )
 
@@ -32,19 +32,19 @@ admin_views = Blueprint('admin_views', __name__, template_folder='../templates')
 
 
 # handle deletion
-@admin_views.route('/delete_listing/<int:job_id>', methods=['GET'])
+@admin_views.route('/delete_job/<int:job_id>', methods=['GET'])
 @jwt_required()
-def delete_listing_action(job_id):
+def delete_job_action(job_id):
 
-    deleted = delete_listing(job_id)
+    deleted = delete_job(job_id)
 
     response = None
 
     if deleted:
-        flash('Job listing deleted!', 'success')
+        flash('Job job deleted!', 'success')
         response = redirect(url_for('index_views.index_page'))
     else:
-        flash('Error deleting job listing', 'unsuccessful')
+        flash('Error deleting job job', 'unsuccessful')
         response = (redirect(url_for('index_views.login_page')))
 
     return response
