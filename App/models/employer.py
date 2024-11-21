@@ -19,7 +19,7 @@ class Employer(User):
 
     employer_website = db.Column(db.String(120))
 
-    #Company Name and postedJob added- Shiann
+    #Company Name and postedJob added
     companyName = db.Column(db.String(100), primary_key=True)
     postedJobs = db.relationship("Job", back_populates="employer")
 
