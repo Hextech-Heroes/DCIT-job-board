@@ -1,6 +1,6 @@
 from flask_jwt_extended import create_access_token,set_access_cookies, jwt_required, JWTManager, get_jwt_identity, verify_jwt_in_request
 
-from App.models import User, Admin, Alumni, Company, Listing
+from App.models import User, Admin, Jobseeker, Employer, Job
 from App.controllers import get_user_by_username
 
 from flask import jsonify
@@ -47,15 +47,15 @@ def setup_jwt(app):
       return admin.username
         # return admin.id
 
-    alumni = Alumni.query.filter_by(username=identity).one_or_none()
-    if alumni:
-      return alumni.username
-      # return alumni.id
+    jobseeker = Jobseeker.query.filter_by(username=identity).one_or_none()
+    if jobseeker:
+      return jobseeker.username
+      # return jobseeker.id
 
-    company = Company.query.filter_by(username=identity).one_or_none()
-    if company:
-      return company.username
-      # company.id
+    employer = Employer.query.filter_by(username=identity).one_or_none()
+    if employer:
+      return employer.username
+      # employer.id
 
     return None
 
@@ -69,15 +69,15 @@ def setup_jwt(app):
     if admin:
       return admin
 
-    alumni = Alumni.query.filter_by(username=identity).one_or_none()
-    # alumni = Alumni.query.get(identity)
-    if alumni:
-      return alumni
+    jobseeker = Jobseeker.query.filter_by(username=identity).one_or_none()
+    # jobseeker = Jobseeker.query.get(identity)
+    if jobseeker:
+      return jobseeker
 
-    company = Company.query.filter_by(username=identity).one_or_none()
-    # company = Company.query.get(identity)
-    if company:
-      return company
+    employer = Employer.query.filter_by(username=identity).one_or_none()
+    # employer = Employer.query.get(identity)
+    if employer:
+      return employer
   return jwt
 
 
