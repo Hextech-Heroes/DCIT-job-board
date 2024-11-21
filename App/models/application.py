@@ -18,7 +18,7 @@ class Application(db.Model):
         self.status = status
 
     def get_json(self):
-        return {
+        return{
             'id': self.id,
             'job_id': self.job_id,
             'job_seeker_id': self.job_seeker_id,
