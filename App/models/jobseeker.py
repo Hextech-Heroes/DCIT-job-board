@@ -1,25 +1,25 @@
 from App.database import db
 from .user import User
-from .listing import categories
+from .job import categories
 
 # from .file import File
 
 # categories = ['Software Engineering', 'Database', 'Programming', 'N/A']
 
-class Alumni(User):
+class Jobseeker(User):
     # id = db.Column(db.Integer, primary_key = True)
-    alumni_id = db.Column(db.Integer, nullable = False, unique = True)
+    jobseeker_id = db.Column(db.Integer, nullable = False, unique = True)
     # insert other personal info later
 
 
     # relationship to companies 
-    # company_name = db.Column(db.String(), db.ForeignKey('company.company_name'), nullable=False)
-    # companies = db.relationship('Company', back_populates='applicants', overlaps="company")
+    # employer_name = db.Column(db.String(), db.ForeignKey('employer.employer_name'), nullable=False)
+    # companies = db.relationship('Employer', back_populates='applicants', overlaps="employer")
 
-    # Define relationship to listings
-    listing = db.relationship('Listing', secondary='alumni_listings', back_populates='applicant')
+    # Define relationship to jobs
+    job = db.relationship('Job', secondary='jobseeker_jobs', back_populates='applicant')
 
-    # relationship to listings to receive notifications?
+    # relationship to jobs to receive notifications?
     subscribed = db.Column(db.Boolean, default=False)
 
     # need to add in columns for:
@@ -31,14 +31,14 @@ class Alumni(User):
     lastname = db.Column(db.String(120), nullable = False)
 
     # relationship with files?
-    # files = db.relationship('File', back_populates='alumni', lazy=True)
+    # files = db.relationship('File', back_populates='jobseeker', lazy=True)
 
     # categories = ['Software Engineering', 'Database', 'Programming', 'N/A']
     job_category = db.Column(db.String(120))
 
-    def __init__(self, username, password, email, alumni_id, contact, firstname, lastname):
+    def __init__(self, username, password, email, jobseeker_id, contact, firstname, lastname):
         super().__init__(username, password, email)
-        self.alumni_id = alumni_id
+        self.jobseeker_id = jobseeker_id
         # self.job_category = 'N/A'
         self.job_category = None
         self.subscribed = False
@@ -94,15 +94,15 @@ class Alumni(User):
         else:
             print(f"Category '{category}' does not exist.")
 
-    def get_alumni_id(self):
-        return self.alumni_id
+    def get_jobseeker_id(self):
+        return self.jobseeker_id
 
     def get_json(self):
         return{
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'alumni_id': self.alumni_id,
+            'jobseeker_id': self.jobseeker_id,
             'subscribed': self.subscribed,
             'job_category': self.job_category,
             'contact':self.contact,
