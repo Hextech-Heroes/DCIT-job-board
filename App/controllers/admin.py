@@ -1,4 +1,4 @@
-from App.models import User, Admin, Alumni, Company, Listing
+from App.models import User, Admin, Jobseeker, Employer, Job
 from App.database import db
 
 # create and add a new admin into the db
@@ -6,13 +6,13 @@ def add_admin(username, password, email):
 
     # Check if there are no other users with the same username or email values in any other subclass
         if (
-            Alumni.query.filter_by(username=username).first() is not None or
+            Jobseeker.query.filter_by(username=username).first() is not None or
             # Admin.query.filter_by(username=username).first() is not None or
-            Company.query.filter_by(username=username).first() is not None or
+            Employer.query.filter_by(username=username).first() is not None or
 
-            Company.query.filter_by(email=email).first() is not None or
+            Employer.query.filter_by(email=email).first() is not None or
             # Admin.query.filter_by(email=email).first() is not None
-            Alumni.query.filter_by(email=email).first() is not None
+            Jobseeker.query.filter_by(email=email).first() is not None
             
         ):
             return None  # Return None to indicate duplicates
@@ -26,13 +26,13 @@ def add_admin(username, password, email):
             db.session.rollback()
             return None
 
-def delete_listing(listing_id):
-    from .listing import get_listing
+def delete_job(job_id):
+    from .job import get_job
 
-    listing = get_listing(listing_id)
+    job = get_job(job_id)
 
-    if listing is not None:
-        db.session.delete(listing)
+    if job is not None:
+        db.session.delete(job)
         db.session.commit()
         return True
 
@@ -50,14 +50,14 @@ def get_all_admins_json():
     admins = [admin.get_json() for admin in admins]
     return admins
 
-# delete other listings
-def delete_listing(listing_id):
-    from .listing import get_listing
+# delete other jobs
+def delete_job(job_id):
+    from .job import get_job
 
-    listing = get_listing(listing_id)
+    job = get_job(job_id)
 
-    if listing is not None:
-        db.session.delete(listing)
+    if job is not None:
+        db.session.delete(job)
         db.session.commit()
         return True
 
@@ -75,4 +75,4 @@ def delete_listing(listing_id):
 #         return True
 #     return None
 
-# edit other listings
+# edit other jobs

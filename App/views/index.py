@@ -6,19 +6,19 @@ from flask_jwt_extended import jwt_required, current_user, unset_jwt_cookies, se
 
 
 from App.controllers import(
-    get_all_listings,
-    get_company_listings,
-    add_listing,
-    apply_listing,
-    add_alumni,
+    get_all_jobs,
+    get_employer_jobs,
+    add_job,
+    apply_job,
+    add_jobseeker,
     add_admin,
-    add_company,
-    get_listing
+    add_employer,
+    get_job
 )
 
 from App.models import(
-    Alumni,
-    Company,
+    Jobseeker,
+    Employer,
     Admin
 )
 
@@ -31,14 +31,14 @@ index_views = Blueprint('index_views', __name__, template_folder='../templates')
 @jwt_required()
 def index_page():
     # return render_template('index.html')
-    jobs = get_all_listings()
+    jobs = get_all_jobs()
 
-    if isinstance(current_user, Alumni):
-        return render_template('alumni.html', jobs=jobs )
+    if isinstance(current_user, Jobseeker):
+        return render_template('jobseeker.html', jobs=jobs )
     
-    if isinstance(current_user, Company):
-        jobs = get_company_listings(current_user.username)
-        return render_template('company-view.html', jobs=jobs)
+    if isinstance(current_user, Employer):
+        jobs = get_employer_jobs(current_user.username)
+        return render_template('employer-view.html', jobs=jobs)
 
     if isinstance(current_user, Admin):
         return render_template('admin.html', jobs=jobs)
@@ -55,12 +55,12 @@ def submit_application_action():
     response = None
 
     print(data)
-    # print(current_user.alumni_id)
+    # print(current_user.jobseeker_id)
 
     try:
-        alumni = apply_listing(current_user.alumni_id, data['job_id'])
+        jobseeker = apply_job(current_user.jobseeker_id, data['job_id'])
 
-        # print(alumni)
+        # print(jobseeker)
         response = redirect(url_for('index_views.index_page'))
         flash('Application submitted')
 
@@ -79,18 +79,18 @@ def submit_application_action():
 # @jwt_required()
 # def view_applications_page(job_id):
 
-#     # get the listing
-#     listing = get_listing(job_id)
+#     # get the job
+#     job = get_job(job_id)
 
-#     # applicants = listing.get_applicants()
+#     # applicants = job.get_applicants()
 
 #     response = None
-#     print(listing)
+#     print(job)
 
 #     try:
-#         applicants = listing.get_applicants()
+#         applicants = job.get_applicants()
 #         print(applicants)
-#         return render_template('viewapp-company.html', applicants=applicants)
+#         return render_template('viewapp-employer.html', applicants=applicants)
 
 #     except Exception:
 #         flash('Error receiving applicants')
@@ -98,17 +98,17 @@ def submit_application_action():
 
 #     return response
 
-# @index_views.route('/add_listing', methods=['GET'])
+# @index_views.route('/add_job', methods=['GET'])
 # @jwt_required()
-# def add_listing_page():
+# def add_job_page():
 #     # username = get_jwt_identity()
 #     # user = get_user_by_username(username)
 
-#     return render_template('companyform.html')
+#     return render_template('employerform.html')
 
-# @index_views.route('/add_listing', methods=['POST'])
+# @index_views.route('/add_job', methods=['POST'])
 # @jwt_required()
-# def add_listing_action():
+# def add_job_action():
 #     # username = get_jwt_identity()
 #     # user = get_user_by_username(username)
 #     data = request.form
@@ -127,14 +127,14 @@ def submit_application_action():
 #         if data['national_tt'] == 'Yes':
 #             national = True
 
-#         listing = add_listing(data['title'], data['description'], current_user.company_name, data['salary'], data['position_type'],
+#         job = add_job(data['title'], data['description'], current_user.employer_name, data['salary'], data['position_type'],
 #                               remote, national, data['desired_candidate_type'], data['job_area'], None)
-#         print(listing)
-#         flash('Created job listing')
+#         print(job)
+#         flash('Created job job')
 #         response = redirect(url_for('index_views.index_page'))
 #     except Exception:
-#         flash('Error creating listing')
-#         response = redirect(url_for('index_views.add_listing_page'))
+#         flash('Error creating job')
+#         response = redirect(url_for('index_views.add_job_page'))
     
 #     return response
 
@@ -167,10 +167,10 @@ def init():
     # add in the first admin
     add_admin('bob', 'bobpass', 'bob@mail')
 
-    # add in alumni
-    add_alumni('rob', 'robpass', 'rob@mail', '123456789', '1868-333-4444', 'robfname', 'roblname')
+    # add in jobseeker
+    add_jobseeker('rob', 'robpass', 'rob@mail', '123456789', '1868-333-4444', 'robfname', 'roblname')
 
-    # add_alumni('rooooob', 'robpass', 'roooooob@mail', '123456089')
+    # add_jobseeker('rooooob', 'robpass', 'roooooob@mail', '123456089')
 
     # add_categories('123456789', ['Database'])
     # print('test')
@@ -183,16 +183,16 @@ def init():
     # subscribe_action('123456789')
 
     # add in companies
-    add_company('company1', 'company1', 'compass', 'company@mail',  'company_address', 'contact', 'company_website.com')
-    add_company('company2', 'company2', 'compass', 'company@mail2',  'company_address2', 'contact2', 'company_website2.com')
+    add_employer('employer1', 'employer1', 'compass', 'employer@mail',  'employer_address', 'contact', 'employer_website.com')
+    add_employer('employer2', 'employer2', 'compass', 'employer@mail2',  'employer_address2', 'contact2', 'employer_website2.com')
 
-    # add in listings
-    # listing1 = add_listing('listing1', 'job description', 'company2')
-    # print(listing1, 'test')
-    add_listing('listing1', 'job description1', 'company1',
+    # add in jobs
+    # job1 = add_job('job1', 'job description', 'employer2')
+    # print(job1, 'test')
+    add_job('job1', 'job description1', 'employer1',
                 8000, 'Part-time', True, 'employmentTerm!', True, 'desiredCandidate?', 'Curepe', ['Database', 'Programming', 'butt'])
 
-    add_listing('listing2', 'job description', 'company2',
+    add_job('job2', 'job description', 'employer2',
                 4000, 'Full-time', True, 'employmentTerm?', True, 'desiredCandidate?', 'Curepe', ['Database', 'Programming', 'butt'])
 
     return jsonify(message='db initialized!')

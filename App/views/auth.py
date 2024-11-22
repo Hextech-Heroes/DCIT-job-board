@@ -8,8 +8,8 @@ from App.controllers import (
     login_user,
     get_user_by_username,
     get_all_users,
-    add_alumni,
-    add_company
+    add_jobseeker,
+    add_employer
 )
 
 
@@ -73,15 +73,15 @@ def login_action():
 #         set_access_cookies(response, token) 
 #     return response
 
-@auth_views.route('/alumni-signup', methods=['POST'])
-def alumni_signup_action():
+@auth_views.route('/jobseeker-signup', methods=['POST'])
+def jobseeker_signup_action():
   data = request.form
   
   response = None
 
   try:
-    newAlumni = add_alumni(data['username'], data['password'], data['email'],
-                          data['alumni_id'], data['contact'], data['firstname'], data['lastname'])
+    newJobseeker = add_jobseeker(data['username'], data['password'], data['email'],
+                          data['jobseeker_id'], data['contact'], data['firstname'], data['lastname'])
 
     token = login(data['username'], data['password'])
 
@@ -101,17 +101,17 @@ def alumni_signup_action():
 
   return response
 
-@auth_views.route('/company-signup', methods=['POST'])
-def company_signup_action():
+@auth_views.route('/employer-signup', methods=['POST'])
+def employer_signup_action():
   data = request.form
   
   response = None
 
   try:
-    # newAlumni = add_alumni(data['username'], data['password'], data['email'],
-    #                       data['alumni_id'], data['contact'], data['firstname'], data['lastname'])
-    newCompany = add_company(data['username'], data['company_name'], data['password'], data['email'],
-                             data['company_address'], data['contact'], data['company_website'])
+    # newJobseeker = add_jobseeker(data['username'], data['password'], data['email'],
+    #                       data['jobseeker_id'], data['contact'], data['firstname'], data['lastname'])
+    newEmployer = add_employer(data['username'], data['employer_name'], data['password'], data['email'],
+                             data['employer_address'], data['contact'], data['employer_website'])
 
     token = login(data['username'], data['password'])
 

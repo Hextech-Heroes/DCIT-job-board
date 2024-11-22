@@ -9,20 +9,20 @@ from .index import index_views
 
 from App.controllers import(
     get_user_by_username,
-    is_alumni_subscribed,
+    is_jobseeker_subscribed,
     subscribe,
     unsubscribe
 )
 
 from App.models import(
-    Alumni,
-    Company,
+    Jobseeker,
+    Employer,
     Admin
 )
 
-alumni_views = Blueprint('alumni_views', __name__, template_folder='../templates')
+jobseeker_views = Blueprint('jobseeker_views', __name__, template_folder='../templates')
 
-@alumni_views.route('/subscribe', methods=['POST'])
+@jobseeker_views.route('/subscribe', methods=['POST'])
 @jwt_required()
 def subscribe_action():
     # get form data
@@ -31,11 +31,11 @@ def subscribe_action():
 
     # print(data)
     # print([data['category']])
-    # print(current_user.alumni_id)
+    # print(current_user.jobseeker_id)
 
     try:
-        alumni = subscribe(current_user.alumni_id, data['category'])
-        # print(alumni.get_json())
+        jobseeker = subscribe(current_user.jobseeker_id, data['category'])
+        # print(jobseeker.get_json())
         response = redirect(url_for('index_views.index_page'))
         flash('Subscribed!', 'success')
 
@@ -46,7 +46,7 @@ def subscribe_action():
 
     return response
 
-@alumni_views.route('/unsubscribe', methods=['POST'])
+@jobseeker_views.route('/unsubscribe', methods=['POST'])
 @jwt_required()
 def unsubscribe_action():
     # get form data
@@ -56,8 +56,8 @@ def unsubscribe_action():
     # print(data)
 
     try:
-        alumni = unsubscribe(current_user.alumni_id)
-        # print(alumni.get_json())
+        jobseeker = unsubscribe(current_user.jobseeker_id)
+        # print(jobseeker.get_json())
         response = redirect(url_for('index_views.index_page'))
         flash('Unsubscribed!', 'success')
 

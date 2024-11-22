@@ -9,38 +9,38 @@ from .index import index_views
 
 from App.controllers import(
     get_user_by_username,
-    get_all_listings,
-    get_company_listings,
-    add_listing,
+    get_all_jobs,
+    get_employer_jobs,
+    add_job,
     add_categories,
-    get_listing,
+    get_job,
     set_request
 )
 
 from App.models import(
-    Alumni,
-    Company,
+    Jobseeker,
+    Employer,
     Admin
 )
 
-company_views = Blueprint('company_views', __name__, template_folder='../templates')
+employer_views = Blueprint('employer_views', __name__, template_folder='../templates')
 
-@company_views.route('/view_applications/<int:job_id>', methods=['GET'])
+@employer_views.route('/view_applications/<int:job_id>', methods=['GET'])
 @jwt_required()
 def view_applications_page(job_id):
 
-    # get the listing
-    listing = get_listing(job_id)
+    # get the job
+    job = get_job(job_id)
 
-    # applicants = listing.get_applicants()
+    # applicants = job.get_applicants()
 
     response = None
-    print(listing)
+    print(job)
 
     try:
-        applicants = listing.get_applicants()
+        applicants = job.get_applicants()
         print(applicants)
-        return render_template('viewapp-company.html', applicants=applicants)
+        return render_template('viewapp-employer.html', applicants=applicants)
 
     except Exception:
         flash('Error receiving applicants', 'unsuccessful')
@@ -48,17 +48,17 @@ def view_applications_page(job_id):
 
     return response
 
-@company_views.route('/add_listing', methods=['GET'])
+@employer_views.route('/add_job', methods=['GET'])
 @jwt_required()
-def add_listing_page():
+def add_job_page():
     # username = get_jwt_identity()
     # user = get_user_by_username(username)
 
-    return render_template('companyform.html')
+    return render_template('employerform.html')
 
-@company_views.route('/add_listing', methods=['POST'])
+@employer_views.route('/add_job', methods=['POST'])
 @jwt_required()
-def add_listing_action():
+def add_job_action():
     # username = get_jwt_identity()
     # user = get_user_by_username(username)
     data = request.form
@@ -66,7 +66,7 @@ def add_listing_action():
     response = None
 
     # print(data)
-    # print(current_user.company_name)
+    # print(current_user.employer_name)
 
     try:
         remote = False
@@ -78,25 +78,25 @@ def add_listing_action():
         if 'national_tt' in data and data['national_tt'] == 'Yes':
             national = True
 
-        listing = add_listing(data['title'], data['description'], current_user.company_name, data['salary'], data['position_type'],
+        job = add_job(data['title'], data['description'], current_user.employer_name, data['salary'], data['position_type'],
                               remote, national, data['desired_candidate_type'], data['job_area'], None)
-        # print(listing)
-        flash('Created job listing', 'success')
+        # print(job)
+        flash('Created job job', 'success')
         response = redirect(url_for('index_views.index_page'))
     except Exception:
-        flash('Error creating listing', 'unsuccessful')
-        response = redirect(url_for('company_views.add_listing_page'))
+        flash('Error creating job', 'unsuccessful')
+        response = redirect(url_for('employer_views.add_job_page'))
     
     return response
 
-@company_views.route('/request_delete_listing/<int:job_id>', methods=['GET'])
+@employer_views.route('/request_delete_job/<int:job_id>', methods=['GET'])
 @jwt_required()
-def request_delete_listing_action(job_id):
+def request_delete_job_action(job_id):
 
-    listing = set_request(job_id, 'Delete')
+    job = set_request(job_id, 'Delete')
     response = None
 
-    if listing is not None:
+    if job is not None:
         flash('Request for deletion sent!', 'success')
         response = redirect(url_for('index_views.index_page'))
     else:
@@ -105,15 +105,15 @@ def request_delete_listing_action(job_id):
 
     return response
 
-@company_views.route('/request_edit_listing/<int:job_id>', methods=['GET'])
+@employer_views.route('/request_edit_job/<int:job_id>', methods=['GET'])
 @jwt_required()
-def request_edit_listing_action(job_id):
+def request_edit_job_action(job_id):
 
-    listing = set_request(job_id, 'Edit')
+    job = set_request(job_id, 'Edit')
     response = None
-    print(listing.request)
+    print(job.request)
 
-    if listing is not None:
+    if job is not None:
         flash('Request for edit sent!', 'success')
         response = redirect(url_for('index_views.index_page'))
     else:

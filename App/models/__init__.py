@@ -1,6 +1,6 @@
 from .user import *
 
 from .admin import *
-from .alumni import *
-from .listing import *
-from .company import *
+from .jobseeker import *
+from .job import *
+from .employer import *
