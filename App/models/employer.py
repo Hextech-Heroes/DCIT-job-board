@@ -4,42 +4,38 @@ from .job import Job
 
 
 class Employer(User):
-    # id = db.Column(db.Integer, primary_key = True)
-    # id = db.Column(db.Integer)
-
-    # employer_name = db.Column(db.String, primary_key = True)
-    employer_name = db.Column(db.String, unique=True, nullable=False)
-
-    # insert other employer information here later
-    # hrname = db.Column(db.String(120))
-    # hremail = db.column(db.String(120))
+    #id = db.Column(db.Integer,unique=True, nullable=False)
+    #username = db.Column(db.String(120))
+    employer_name = db.Column(db.String(120), unique=True, nullable=False)
+    #email = db.Column(db.String(120))
     employer_address = db.Column(db.String(120))
-
-    contact = db.Column(db.String())
-
+    contact = db.Column(db.String(120))
     employer_website = db.Column(db.String(120))
+    password = db.Column(db.String(120))
 
     #Company Name and postedJob added
     companyName = db.Column(db.String(100), primary_key=True)
-    postedJobs = db.relationship("Job", back_populates="employer")
+    postedJobs = db.relationship("Job", back_populates="employer", lazy= True)
 
 
 
 
     # set up relationship with Job object (1-M)
-    jobs = db.relationship('Job', backref='employer', lazy=True)
+   # jobs = db.relationship('Job', backref='employer', lazy=True)
 
     # maybe relationship with jobseeker? list of jobseeker as subscribers?
     # applicants?
     # applicants = db.relationship('Jobseeker', backref='employer', lazy=True)
 
-    def __init__(self, username, employer_name, password, email, employer_address, contact, employer_website):
+    def __init__(self, id, username, employer_name, password, email, employer_address, contact, employer_website,companyName):
         super().__init__(username, password, email)
+        self.id = id
+        self.username= username
         self.employer_name = employer_name
+        self.password = paswword
         self.employer_address = employer_address
         self.contact = contact
         self.employer_website = employer_website
-        #New-
         self.companyName = companyName
 
         
@@ -47,6 +43,7 @@ class Employer(User):
         return{
             'id': self.id,
             'employer_name': self.employer_name,
+            'password' : self.password,
             'email': self.email,
             'employer_address':self.employer_address,
             'contact':self.contact,
