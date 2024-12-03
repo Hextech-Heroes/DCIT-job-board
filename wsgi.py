@@ -225,10 +225,13 @@ employer_cli = AppGroup('employer', help='Employer object commands')
 @employer_cli.command("list", help="Lists employer in the database")
 @click.argument("format", default="string")
 def list_employer_command(format):
-    if format == 'string':
-        print(get_all_companies())
-    else:
-        print(get_all_companies_json())
+    try:
+        if format == 'string':
+            print(get_all_companies())
+        else:
+            print(get_all_companies_json())
+    except Exception as e:
+        print(f"Error listing employers: {e}")
 
 # flask employer add
 @employer_cli.command("add", help = "Add an employer object to the database")
@@ -238,12 +241,17 @@ def list_employer_command(format):
 @click.argument("email", default="aahpull@mail")
 # @click.argument("job_categories", default='Database')
 def add_employer_command(username, employer_name, password, email):
-    employer = add_employer(username, employer_name, password, email)
-
-    if employer is None:
-        print('Error creating employer')
-    else:
-        print(f'{employer} created!')
+    if get_user_by_username(username):
+        print(f"Username {username} already ecists.")
+        return
+    try:
+        employer = add_employer(username, employer_name, password, email)
+        if employer is None:
+            print('Error creating employer')
+        else:
+            print(f'{employer} created!')
+    except Exception as e:
+        print(f"Error creating employer: {e}")
 
 
 app.cli.add_command(employer_cli)
