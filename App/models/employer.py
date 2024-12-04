@@ -4,7 +4,7 @@ from .user import User
 
 
 class Employer(User):
-    #id = db.Column(db.Integer,unique=True, nullable=False)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     #username = db.Column(db.String(120))
     employer_name = db.Column(db.String(120), unique=True, nullable=False)
     #email = db.Column(db.String(120))
@@ -14,7 +14,7 @@ class Employer(User):
     password = db.Column(db.String(120))
 
     #Company Name and postedJob added
-    companyName = db.Column(db.String(100), primary_key=True)
+    companyName = db.Column(db.String(100), nullable=False)
     postedJobs = db.relationship("Job", back_populates="employer", lazy= True)
 
     applications = db.relationship("Application", back_populates="employer")
@@ -31,7 +31,6 @@ class Employer(User):
 
     def __init__(self,username, employer_name, password, email, employer_address, contact, employer_website,companyName):
         super().__init__(username, password, email)
-        self.id = id
         self.username= username
         self.employer_name = employer_name
         self.password = password

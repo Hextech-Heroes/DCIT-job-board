@@ -69,7 +69,7 @@ def send_notification(job_categories=None):
              print(f"No common jobs for Job Seeker: {jobseeker.username} with subscribed categories: {jobs}")
 
     # do notification send here? use mail chimp?
-    print(f"Notifying the folloewing job seekeers about job the job categories:{job_categories}")
+    print(f"Notifying the following job seekeers about job in the job categories:{job_categories}")
     for seeker in notif_jobseeker:
         print(f"Notifying Job Seeker: {seeker.username} with subscribed categories: {seeker.get_categories()}")
 
