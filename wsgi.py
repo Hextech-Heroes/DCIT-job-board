@@ -161,15 +161,20 @@ def list_jobseeker_command(format):
     else:
         print(get_all_jobseeker_json())
 
+#def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname):
+#add_jobseeker('rob', 'robpass', 'rob@mail', '123456789', '1868-333-4444', 'robfname', 'roblname')
 # flask jobseeker add
 @jobseeker_cli.command("add", help = "Add an jobseeker object to the database")
 @click.argument("username", default="rob2")
 @click.argument("password", default="robpass")
 @click.argument("email", default="rob@mail2")
 @click.argument("jobseeker_id", default="987654321")
+@click.argument("contact", default="1868-444-5555")
+@click.argument("firstname", default="robby")
+@click.argument("lastname", default="robarius")
 # @click.argument("job_categories", default='Database')
-def add_jobseeker_command(username, password, email, jobseeker_id):
-    jobseeker = add_jobseeker(username, password, email, jobseeker_id)
+def add_jobseeker_command(username, password, email, jobseeker_id, contact, firstname, lastname):
+    jobseeker = add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname)
 
     if jobseeker is None:
         print('Error creating jobseeker')
@@ -239,13 +244,16 @@ def list_employer_command(format):
 @click.argument("employer_name", default="aah pull")
 @click.argument("password", default="password")
 @click.argument("email", default="aahpull@mail")
+@click.argument("employer_address", default="111 Wall Street")
+@click.argument("contact", default="1868-555-6666")
+@click.argument("employer_website", default="www.aahpullemployer.com")
 # @click.argument("job_categories", default='Database')
-def add_employer_command(username, employer_name, password, email):
+def add_employer_command(username, employer_name, password, email, employer_address, contact, employer_website):
     if get_user_by_username(username):
-        print(f"Username {username} already ecists.")
+        print(f"Username {username} already exists.")
         return
     try:
-        employer = add_employer(username, employer_name, password, email)
+        employer = add_employer(username, employer_name, password, email, employer_address, contact, employer_website)
         if employer is None:
             print('Error creating employer')
         else:
@@ -268,15 +276,29 @@ def list_job_command(format):
     else:
         print(get_all_jobs_json())
 
+
+#add_job('job1', 'job description1', 'employer1',
+#            8000, 'Part-time', True, True, 'desiredCandidate?', 'Curepe', ['Database Manager', 'Programming', 'butt'])
+
+#def add_job(title, description, employer_name,
+#            salary, position, remote, ttnational, desiredcandidate, area, job_categories=None):
 # flask job add
 # Note: you have to manually enter in the job categories here eg: flask job add jobtitle desc employer1 Database
 @job_cli.command("add", help="Add job object to the database")
 @click.argument("title", default="Job offer 1")
-@click.argument("description", default="very good job :)")
+@click.argument("description", default="AI and Data Analytics")
 @click.argument("employer_name", default="employer1")
-@click.argument("job_categories", nargs=-1, type=str)
-def add_job_command(title, description, employer_name, job_categories):
-    job = add_job(title, description, employer_name, job_categories)
+@click.argument("salary", default="9000")
+@click.argument("position", default="Full-time")
+@click.argument("remote", default=False)
+@click.argument("ttnational", default=True)
+@click.argument("desiredcandidate", default="Data Analyst")
+@click.argument("area", default="POS")
+@click.argument("job_categories", default=['Big Data', 'AI'], type = list)
+#@click.argument("job_categories", nargs=-1, type=str)
+
+def add_job_command(title, description, employer_name, salary, position, remote, ttnational, desiredcandidate, area, job_categories):
+    job = add_job(title, description, employer_name, salary, position, remote, ttnational, desiredcandidate, area, job_categories)
 
     if job is None:
         print(f'Error adding categories')
@@ -285,12 +307,12 @@ def add_job_command(title, description, employer_name, job_categories):
 
 # flask job delete
 @job_cli.command("delete", help="delete job object from the database")
-@click.argument("id", default="1")
-def delete_job_command(id):
+@click.argument("job_title", default="job1")
+def delete_job_command(job_title):
 
     # job = get_job(id)
 
-    deleted = delete_job(id)
+    deleted = delete_job(job_title)
 
     if deleted is not None:
         print('Job deleted')
@@ -299,12 +321,12 @@ def delete_job_command(id):
 
 # flask job applicants
 @job_cli.command("applicants", help="Get all applicants for the job")
-@click.argument("job_id", default='1')
-def get_job_applicants_command(job_id):
-    applicants = get_all_applicants(job_id)
+@click.argument("job_title", default='job1')
+def get_job_applicants_command(job_title):
+    applicants = get_all_applicants(job_title)
 
     if applicants is None:
-        print(f'Error getting applicants')
+        print(f'No applicants was found')
     else:
         print(applicants)
 
