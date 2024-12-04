@@ -10,10 +10,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: gainsboro;
+            background-color: darkorchid;
         }
         header {
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             padding: 10px;
             display: flex;
@@ -23,7 +23,7 @@
         .logout{
             position: relative;
             margin-left: auto;
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             padding: 10px;
             border: none;
@@ -37,7 +37,7 @@
             position: absolute;
             right: 210px;
             padding: 10px;
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -59,7 +59,7 @@
         }
 
         .logout:hover, .subscribe:hover, .unsubscribe:hover{
-            background-color: rgb(98, 127, 191);
+            background-color: rgb(123, 57, 1851);
         }
 
         .subpopup-content {
@@ -229,7 +229,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(46, 44, 44, 0.3);
             text-align: center;
             overflow: auto;
             position: relative;
@@ -293,7 +293,7 @@
         }
 
         .job-details {
-            display: none; /* Initially hidden */
+            display: none;
             margin-top: 10px;
         }
         .alert {
@@ -321,6 +321,7 @@
 <body>
     <header>
         <h1>DCIT Job Board</h1>
+        <h2>Welcome Alumni/Jobseeker</h2>
         <button class="subscribe" id="displayPopup">Subscribe</button>
         <!-- <button class="unsubscribe">
             Unsubscribe
@@ -348,11 +349,11 @@
     <div class="container">
         <div id="subpopup" class="popup-container">
             <div class="subpopup-content">
-                <h2>Wecome Alumni</h2>
+                <h2>Wecome Jobseeker/Alumni</h2>
  
                 <p>Welcome to the DCIT Job Board! Explore our curated job listings directly below. 
-                Whether you're a recent graduate or seasoned professional, find your perfect opportunity here. 
-                Stay updated by subscribing to our mailing list for the latest job postings. Start your journey to career success today!</p>
+                Whether you're a recent graduate or seasoned professional, find the perfect opportunity for you here. 
+                Stay updated by subscribing to our mailing list for the latest job postings.</p>
                     
 
                 <section class="subscription">
@@ -461,12 +462,42 @@
         </div>       
     </div>
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const jobCards = document.querySelectorAll('.job_card');
-    const searchInput = document.getElementById('searchInput');
-    const expandBtns = document.querySelectorAll('.expand-btn');
-    const applyBtns = document.querySelectorAll('.applyBtn'); // Select all apply buttons
-    const closeFormBtns = document.querySelectorAll('.close-btn'); // Select all close buttons
+    document.addEventListener("DOMContentLoaded", function() {
+        const jobCards = document.querySelectorAll('.job_card');
+        const searchInput = document.getElementById('searchInput');
+        const expandBtns = document.querySelectorAll('.expand-btn');
+        const applyBtns = document.querySelectorAll('.applyBtn'); // Select all apply buttons
+        const closeFormBtns = document.querySelectorAll('.close-btn'); // Select all close buttons
+        const popupContainer = document.getElementById("subpopup");
+        const subscribeButton = document.getElementById("subscribe-btn");
+        const closeButton = document.getElementById("closePopup");
+        const confirmButton = document.getElementById("confirmSubscribe");
+        const showModal = popupContainer.dataset.showModal;
+
+        function showPopup() {
+            popupContainer.style.display = "block";
+        }
+
+        function hidePopup() {
+            popupContainer.style.display = "none";
+        }
+
+        if (showModal === "True") {
+            showPopup();
+        }
+
+        subscribeButton.addEventListener("click", () => {
+            showPopup();
+        });
+
+        closeButton.addEventListener("click", () => {
+            hidePopup();
+        });
+
+        confirmButton.addEventListener("click", () => {
+            alert("You are now subscribed!");
+            hidePopup();
+        });
 
     expandBtns.forEach((expandBtn) => {
         expandBtn.addEventListener('click', function() {
@@ -509,11 +540,6 @@
     }
 });
 
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const jobCards = document.querySelectorAll('.job_card');
-        const searchInput = document.getElementById('searchInput');
-
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.trim().toLowerCase();
             filterJobs(searchTerm);
@@ -530,12 +556,6 @@
             });
         }
     });
-
-    document.addEventListener("DOMContentLoaded", function() {
-            const popupContainer = document.getElementById("subpopup");
-            const closeButton = document.getElementById("subclose-btn");
-            const subscribeButton = document.getElementById("subscribe-btn");
-            const displayPopupButton = document.getElementById("displayPopup");
 
             // Function to show the popup
             function showPopup() {
@@ -581,7 +601,33 @@
             }
         }, 5000);  // 5000 milliseconds = 5 seconds
 </script>
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
 
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+}
+
+.popup-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
 </body>
 </html>
 

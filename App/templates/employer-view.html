@@ -13,7 +13,7 @@
         }
 
         header {
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             padding: 10px 20px;
             display: flex;
@@ -23,7 +23,7 @@
 
         button, a {
             padding: 10px;
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             border: none;
             border-radius: 3px;
@@ -31,22 +31,22 @@
             text-decoration: none;
         }
         button:hover, a:hover {
-            background-color: rgb(98, 127, 191);
+            background-color: rgb(123, 57, 185);
         }
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #e7e5e5;
             border-radius: 5px;
-            background-color: #f9f9f9;
+            background-color: #4d4b4b;
         }
         .job-listing {
             margin-bottom: 20px;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #494848;
             position: relative;
         }
         .job-actions {
@@ -60,7 +60,7 @@
             top: 20px;
             right: 10px;
             padding: 10px 20px;
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -72,7 +72,7 @@
             top: 20px;
             right: 100px;
             padding: 10px;
-            background-color: rgb(57, 97, 185);
+            background-color: rgb(123, 57, 185);
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -123,7 +123,7 @@
     <div class="container">
         {% for job in jobs %}
         <div class="job-listing">
-            <h3>{{ job.company_name }}</h3>
+            <h3>{{ job.employer_name }}</h3>
             <h4>{{ job.title }}</h4>
             <p>Description: {{ job.description }}</p>
             <p>Position Type: {{ job.position }}</p>
