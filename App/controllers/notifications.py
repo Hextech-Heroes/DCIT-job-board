@@ -103,6 +103,5 @@ def notify_admin(event_type, event_details):
         print(f"Notified admin {admin.username} about event '{event_type}'.")
 
     return admins 
-    ##notifications 
-    #buy
+    
     
