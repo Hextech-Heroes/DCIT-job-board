@@ -36,7 +36,8 @@ class Jobseeker(User):
     # files = db.relationship('File', back_populates='jobseeker', lazy=True)
 
     # categories = ['Software Engineering', 'Database', 'Programming', 'N/A']
-    job_category = db.Column(db.String(120))
+    job_category = db.Column(db.String(120), nullable=True)
+    has_seen_modal = db.Column(db.Boolean, default=False)
 
     def __init__(self, username, password, email, jobseeker_id, contact, firstname, lastname):
         super().__init__(username, password, email)
