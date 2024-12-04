@@ -66,6 +66,8 @@ class Job(db.Model):
     applicant = db.relationship('Jobseeker', secondary='jobseeker_jobs', back_populates='job')
     # applicants = db.relationship('Jobseeker', secondary=jobseeker_jobs_association, backref='applied_jobs')
 
+    approved = db.Column(db.Boolean, default=False)
+
     # requests for deletion?
     request = db.Column(db.String())
 
@@ -91,7 +93,7 @@ class Job(db.Model):
         self.ttnational = ttnational
         self.desiredcandidate = desiredcandidate
         self.area = area
-
+        self.approved = False
         self.request = 'None'
 
     def get_employer(self):
@@ -153,4 +155,5 @@ class Job(db.Model):
             'ttnational':self.ttnational,
             'desiredcandidate':self.desiredcandidate,
             'area':self.area,
+            'approved':self.approved
         }
