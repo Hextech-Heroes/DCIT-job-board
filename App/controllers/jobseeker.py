@@ -2,25 +2,27 @@ from App.models import User, Jobseeker, Admin, Employer, Job
 from App.database import db
 
 
-def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname, *args, **kwargs):
-        has_seen_modal = kwargs.get('has_seen_modal', False)
+def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname):
+
         # Check if there are no other users with the same username or email values in any other subclass
         if (
             # Jobseeker.query.filter_by(username=username).first() is not None or
             Admin.query.filter_by(username=username).first() is not None or
             Employer.query.filter_by(username=username).first() is not None or
+
             Employer.query.filter_by(email=email).first() is not None or
             Admin.query.filter_by(email=email).first() is not None
             # Jobseeker.query.filter_by(email=email).first() is not None
             
         ):
             return None  # Return None to indicate duplicates
-        newJobseeker= Jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname, has_seen_modal=has_seen_modal)
+
+        newJobseeker= Jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname)
         try: # safetey measure for trying to add duplicate 
             db.session.add(newJobseeker)
             db.session.commit()  # Commit to save the new  to the database
             return newJobseeker
-        except Exception as e:
+        except:
             db.session.rollback()
             return None
 
@@ -135,11 +137,10 @@ def remove_categories(jobseeker_id, job_categories):
 
 # apply to an application
 # def apply_job(jobseeker_id, job_title):
-def apply_job(jobseeker_id, job_id):
+def apply_job(jobseeker_id, job_title):
     from App.controllers import get_job_title, get_job
 
     jobseeker = get_jobseeker(jobseeker_id)
-
     # error check to see if jobseeker exists
     if jobseeker is None:
         # print('is none')
@@ -147,8 +148,7 @@ def apply_job(jobseeker_id, job_id):
 
     # get the job and then employer that made the job
     # job = get_job_title(job_title)
-    job = get_job(job_id)
-
+    job = get_job_title(job_title)
     if job is None:
         return None
 
