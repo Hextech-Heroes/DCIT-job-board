@@ -1,6 +1,6 @@
 from App.database import db
-from .employer import Employer
-# from .jobseeker import Jobseeker
+#from App.models.employer import Employer
+#from App.models.jobseeker import Jobseeker
 
 from sqlalchemy import CheckConstraint
 
@@ -26,7 +26,7 @@ class Job(db.Model):
 
     # set up relationship with Employer (M-1)
     employer_name = db.Column(db.String(), db.ForeignKey('employer.employer_name'), nullable=False)
-    companies = db.relationship('Employer', back_populates='jobs', overlaps="employer")
+    employer = db.relationship('Employer', back_populates='postedJobs', lazy= True)
 
     # need to add in columns for:
     # -salary - integer

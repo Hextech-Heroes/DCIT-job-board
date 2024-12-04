@@ -1,9 +1,9 @@
 from App.database import db
-from .user import User
-from .job import Job
+#from App.models.user import User
+#from App.models.job import Job
 
 
-class Employer(User):
+class Employer(db.Model):
     #id = db.Column(db.Integer,unique=True, nullable=False)
     #username = db.Column(db.String(120))
     employer_name = db.Column(db.String(120), unique=True, nullable=False)
@@ -11,7 +11,7 @@ class Employer(User):
     employer_address = db.Column(db.String(120))
     contact = db.Column(db.String(120))
     employer_website = db.Column(db.String(120))
-    password = db.Column(db.String(120))
+    #password = db.Column(db.String(120))
 
     #Company Name and postedJob added
     companyName = db.Column(db.String(100), primary_key=True)

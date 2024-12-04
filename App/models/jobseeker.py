@@ -1,6 +1,6 @@
 from App.database import db
-from .user import User
-from .job import categories
+from App.models.user import User
+from App.models.job import categories
 
 # from .file import File
 
