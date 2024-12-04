@@ -51,10 +51,10 @@ def get_all_admins_json():
     return admins
 
 # delete other jobs
-def delete_job(job_id):
-    from .job import get_job
+def delete_job(job_title):
+    from .job import get_job_title
 
-    job = get_job(job_id)
+    job = get_job_title(job_title)
 
     if job is not None:
         db.session.delete(job)
