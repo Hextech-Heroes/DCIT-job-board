@@ -2,27 +2,25 @@ from App.models import User, Jobseeker, Admin, Employer, Job
 from App.database import db
 
 
-def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname):
-
+def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname, *args, **kwargs):
+        has_seen_modal = kwargs.get('has_seen_modal', False)
         # Check if there are no other users with the same username or email values in any other subclass
         if (
             # Jobseeker.query.filter_by(username=username).first() is not None or
             Admin.query.filter_by(username=username).first() is not None or
             Employer.query.filter_by(username=username).first() is not None or
-
             Employer.query.filter_by(email=email).first() is not None or
             Admin.query.filter_by(email=email).first() is not None
             # Jobseeker.query.filter_by(email=email).first() is not None
             
         ):
             return None  # Return None to indicate duplicates
-
-        newJobseeker= Jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname)
+        newJobseeker= Jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname, has_seen_modal=has_seen_modal)
         try: # safetey measure for trying to add duplicate 
             db.session.add(newJobseeker)
             db.session.commit()  # Commit to save the new  to the database
             return newJobseeker
-        except:
+        except Exception as e:
             db.session.rollback()
             return None
 
