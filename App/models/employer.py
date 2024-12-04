@@ -1,6 +1,6 @@
 from App.database import db
 from .user import User
-from .job import Job
+#from .job import Job
 
 
 class Employer(User):
@@ -17,6 +17,8 @@ class Employer(User):
     companyName = db.Column(db.String(100), primary_key=True)
     postedJobs = db.relationship("Job", back_populates="employer", lazy= True)
 
+    applications = db.relationship("Application", back_populates="employer")
+
 
 
 
@@ -27,12 +29,12 @@ class Employer(User):
     # applicants?
     # applicants = db.relationship('Jobseeker', backref='employer', lazy=True)
 
-    def __init__(self, id, username, employer_name, password, email, employer_address, contact, employer_website,companyName):
+    def __init__(self,username, employer_name, password, email, employer_address, contact, employer_website,companyName):
         super().__init__(username, password, email)
         self.id = id
         self.username= username
         self.employer_name = employer_name
-        self.password = paswword
+        self.password = password
         self.employer_address = employer_address
         self.contact = contact
         self.employer_website = employer_website

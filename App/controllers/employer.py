@@ -27,7 +27,9 @@ def add_employer(username, employer_name, password, email, employer_address, con
             email=email, 
             employer_address=employer_address,
             contact=contact, 
-            employer_website=employer_website)
+            employer_website=employer_website,
+            companyName=employer_name) 
+
 
         try: # safetey measure for trying to add duplicate 
             db.session.add(newEmployer)

@@ -11,6 +11,8 @@ class Jobseeker(User):
     jobseeker_id = db.Column(db.Integer, nullable = False, unique = True)
     # insert other personal info later
 
+    applications = db.relationship('Application', back_populates='job_seeker',lazy=True)
+
 
     # relationship to companies 
     # employer_name = db.Column(db.String(), db.ForeignKey('employer.employer_name'), nullable=False)
