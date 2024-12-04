@@ -34,7 +34,8 @@ def index_page():
     jobs = get_all_jobs()
 
     if isinstance(current_user, Jobseeker):
-        return render_template('jobseeker.html', jobs=jobs )
+        show_modal = not current_user.has_seen_modal
+        return render_template('jobseeker.html', jobs=jobs, show_modal=show_modal)
     
     if isinstance(current_user, Employer):
         jobs = get_employer_jobs(current_user.username)
@@ -70,6 +71,18 @@ def submit_application_action():
         response = redirect(url_for('auth_views.login_page'))
 
     return response
+
+@index_views.route('/update_modal_seen', methods=['POST'])
+@jwt_required()
+def update_modal_seen():
+    try:
+        jobseeker = Jobseeker.query.get(current_user.id)
+        jobseeker.has_seen_modal = True
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
     # get the files from the form
     # print('testttt')
