@@ -27,8 +27,10 @@ def get_job_title(job_title):
 def get_all_jobs():
     return Job.query.all()
 
-def get_all_applicants(id):
-    job = get_job(id)
+def get_all_applicants(job_title): 
+    job = get_job_title(job_title)
+    if job is None:
+        return None
     return job.get_applicants()
 
 def get_all_jobs_json():
