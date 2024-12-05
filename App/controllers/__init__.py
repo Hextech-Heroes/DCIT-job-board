@@ -5,3 +5,4 @@ from .admin import *
 from .jobseeker import *
 from .employer import *
 from .job import *
+from .notifications import *

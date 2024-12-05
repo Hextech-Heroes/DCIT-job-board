@@ -138,8 +138,13 @@ def remove_categories(jobseeker_id, job_categories):
 
 # apply to an application
 # def apply_job(jobseeker_id, job_title):
+
 def apply_job(jobseeker_id, job_id):
     from App.controllers import get_job
+=======
+def apply_job(jobseeker_id, job_title):
+    from App.controllers import get_job_title, get_job
+
 
     jobseeker = get_jobseeker(jobseeker_id)
     # error check to see if jobseeker exists
@@ -149,7 +154,11 @@ def apply_job(jobseeker_id, job_id):
 
     # get the job and then employer that made the job
     # job = get_job_title(job_title)
+
     job = get_job(job_id)
+=======
+    job = get_job_title(job_title)
+
     if job is None:
         return None
 

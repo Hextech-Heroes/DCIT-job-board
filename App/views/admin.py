@@ -65,4 +65,68 @@ def delete_job_action(job_id):
 #     return redirect(url_for('user_views.userInfo_page'))
 
 
-# handle updates
+@admin_views.route('/approve_application/<int:application_id>', methods=['POST'])
+@jwt_required()
+def approve_application(application_id):
+    application = Application.query.get(application_id)
+
+    if application is None:
+        flash('Application not found', 'danger')
+        return redirect(url_for('index_views.index_page'))
+
+    if application.status == 'Approved':
+        flash('Application already approved', 'warning')
+        return redirect(url_for('index_views.index_page'))
+
+    application.status = 'Approved'
+    
+    try:
+        db.session.commit()
+        flash('Application approved successfully!', 'success')
+        return redirect(url_for('index_views.index_page'))
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while approving the application', 'danger')
+        return redirect(url_for('index_views.index_page'))
+
+@admin_views.route('/reject_application/<int:application_id>', methods=['POST'])
+@jwt_required()
+def reject_application(application_id):
+    application = Application.query.get(application_id)
+
+    if application is None:
+        flash('Application not found', 'danger')
+        return redirect(url_for('index_views.index_page'))
+
+    if application.status == 'Rejected':
+        flash('Application already rejected', 'warning')
+        return redirect(url_for('index_views.index_page'))
+
+    application.status = 'Rejected'
+
+    try:
+        db.session.commit()
+        flash('Application rejected successfully!', 'success')
+        return redirect(url_for('index_views.index_page'))
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while rejecting the application', 'danger')
+        return redirect(url_for('index_views.index_page'))
+
+@admin_views.route('/applications', methods=['GET'])
+@jwt_required()
+def get_all_applications():
+    applications = Application.query.all()
+    return render_template('admin/applications.html', applications=applications)
+
+@admin_views.route('/applications/jobseeker/<int:jobseeker_id>', methods=['GET'])
+@jwt_required()
+def get_applications_by_jobseeker(jobseeker_id):
+    applications = Application.query.filter_by(jobseeker_id=jobseeker_id).all()
+    return render_template('admin/jobseeker_applications.html', applications=applications)
+
+@admin_views.route('/applications/job/<int:job_id>', methods=['GET'])
+@jwt_required()
+def get_applications_by_job(job_id):
+    applications = Application.query.filter_by(job_id=job_id).all()
+    return render_template('admin/job_applications.html', applications=applications)

@@ -39,7 +39,7 @@ class Jobseeker(User):
     job_category = db.Column(db.String(120), nullable=True)
     has_seen_modal = db.Column(db.Boolean, default=False)
 
-    def __init__(self, username, password, email, jobseeker_id, contact, firstname, lastname):
+    def __init__(self, username, password, email, jobseeker_id, contact, firstname, lastname, has_seen_modal=False):
         super().__init__(username, password, email)
         self.jobseeker_id = jobseeker_id
         # self.job_category = 'N/A'
@@ -48,6 +48,7 @@ class Jobseeker(User):
         self.contact = contact
         self.firstname = firstname
         self.lastname = lastname
+        self.has_seen_modal = has_seen_modal
 
         # if job_categories is None:
         #     self.job_category = 'N/A'
