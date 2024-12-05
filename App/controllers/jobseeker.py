@@ -1,5 +1,6 @@
 from App.models import User, Jobseeker, Admin, Employer, Job
 from App.database import db
+from .notifications import notify_employer
 
 
 def add_jobseeker(username, password, email, jobseeker_id, contact, firstname, lastname):
@@ -137,8 +138,13 @@ def remove_categories(jobseeker_id, job_categories):
 
 # apply to an application
 # def apply_job(jobseeker_id, job_title):
+
+def apply_job(jobseeker_id, job_id):
+    from App.controllers import get_job
+=======
 def apply_job(jobseeker_id, job_title):
     from App.controllers import get_job_title, get_job
+
 
     jobseeker = get_jobseeker(jobseeker_id)
     # error check to see if jobseeker exists
@@ -148,7 +154,11 @@ def apply_job(jobseeker_id, job_title):
 
     # get the job and then employer that made the job
     # job = get_job_title(job_title)
+
+    job = get_job(job_id)
+=======
     job = get_job_title(job_title)
+
     if job is None:
         return None
 
@@ -158,7 +168,7 @@ def apply_job(jobseeker_id, job_title):
 
     #commit changes to the database
     db.session.commit()
-
-    # add the jobseeker as an applicant to the employer model object?
-
+   
+    # notify employer
+    notify_employer(job.id,jobseeker.jobseeker_id)
     return jobseeker
