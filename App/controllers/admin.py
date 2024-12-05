@@ -1,5 +1,20 @@
 from App.models import User, Admin, Jobseeker, Employer, Job
 from App.database import db
+from .job import get_job
+from .notifications import notify_jobseeker
+
+def get_admin(id):
+    return Admin.query.filter_by(id=id).first()
+
+def get_all_admins():
+    return db.session.query(Admin).all()
+
+def get_all_admins_json():
+    admins = get_all_admins()
+    if not admins:
+        return []
+    admins = [admin.get_json() for admin in admins]
+    return admins
 
 # create and add a new admin into the db
 def add_admin(username, password, email):
@@ -26,8 +41,17 @@ def add_admin(username, password, email):
             db.session.rollback()
             return None
 
+def approve_job(job_id):
+    job = get_job(job_id)
+    if job is None:
+        return None
+    job.approved = True
+    db.session.add(job)
+    db.session.commit()
+    notify_jobseeker(job.id)
+    return job
+
 def delete_job(job_id):
-    from .job import get_job
 
     job = get_job(job_id)
 
@@ -37,24 +61,12 @@ def delete_job(job_id):
         return True
 
     return None
-    
 
-
-def get_all_admins():
-    return db.session.query(Admin).all()
-
-def get_all_admins_json():
-    admins = get_all_admins()
-    if not admins:
-        return []
-    admins = [admin.get_json() for admin in admins]
-    return admins
 
 # delete other jobs
-def delete_job(job_title):
-    from .job import get_job_title
+def delete_job(job_id):
 
-    job = get_job_title(job_title)
+    job = get_job(job_id)
 
     if job is not None:
         db.session.delete(job)
