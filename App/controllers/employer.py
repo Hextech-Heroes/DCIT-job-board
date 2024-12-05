@@ -1,7 +1,7 @@
 from App.models import User, Employer, Job, Jobseeker, Admin, Application
 from App.database import db
 from App.controllers import get_all_subscribed_jobseeker
-
+from .notifications import notify_admin
 
 
 def add_employer(username, employer_name, password, email, employer_address, contact, employer_website):
@@ -107,9 +107,11 @@ def add_job(title, description, employer_name,
         db.session.commit()
     
         #Notify subscribed jobseekers if applicable
-        send_notification(job_categories)
+        #send_notification(job_categories)
 
         print(f"Job '{title}' sucessfully added.")
+        #Notify admin of a job submission
+        notify_admin(newJob.id)
         return newJob
     except Exception as e:
         db.session.rollback()
